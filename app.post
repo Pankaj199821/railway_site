@@ -1,0 +1,18 @@
+app.post('/book', (req, res) => {
+    const { trainId, name, age, seat } = req.body; // Extracting booking details from request
+    const train = trains.find(t => t.id === trainId); // Finding the train by ID
+
+    if (!train) {
+        return res.status(404).json({ message: 'Train not found' }); // Error if train not found
+    }
+
+    if (train.seats > 0) {
+        train.seats -= 1; // Reduce available seats by 1
+        res.json({
+            message: 'Ticket booked successfully',
+            ticket: { train: train.name, name, age, seat } // Return ticket details
+        });
+    } else {
+        res.status(400).json({ message: 'No seats available' }); // Error if no seats available
+    }
+});
